@@ -63,6 +63,8 @@ public:
                 #else
                     SPI.setClockDivider(SPI_CLOCK_DIV2); // This will set the SPI frequency to 8MHz - it could be higher, but it is not supported in the old API
                 #endif
+#elif defined(__ARDUINO_ARC__)
+                SPI.setClockDivider(SPI_CLOCK_DIV2);
 #elif !defined(RBL_NRF51822)
                 SPI.setClockDivider(4); // Set speed to 84MHz/4=21MHz - the MAX3421E can handle up to 26MHz
 #endif
@@ -93,10 +95,18 @@ typedef SPi< Pb5, Pb3, Pb4, Pb2 > spi;
 typedef SPi< Pb7, Pb5, Pb6, Pb4 > spi;
 #elif (defined(CORE_TEENSY) && (defined(__MK20DX128__) || defined(__MK20DX256__) || defined(__MKL26Z64__))) || defined(__ARDUINO_X86__) || defined(__MIPSEL__) || defined(STM32F4)
 typedef SPi< P13, P11, P12, P10 > spi;
-#elif defined(ARDUINO_SAM_DUE) && defined(__SAM3X8E__)
+#elif defined(ARDUINO_SAM_DUE)
 typedef SPi< P76, P75, P74, P10 > spi;
+#elif defined(ARDUINO_SAMD_ZERO)
+typedef SPi< P24, P23, P22, P10 > spi;
+/* add boards for arduino.org m0 */
+#elif defined(ARDUINO_SAM_ZERO)
+typedef SPi< P24, P23, P22, P10 > spi;
 #elif defined(RBL_NRF51822)
 typedef SPi< P16, P18, P17, P10 > spi;
+/* arduino 101 boards*/
+#elif defined(__ARDUINO_ARC__)
+typedef SPi< P13, P11, P12, P10 > spi;
 #else
 #error "No SPI entry in usbhost.h"
 #endif
