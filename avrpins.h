@@ -899,7 +899,7 @@ MAKE_PIN(P26, CORE_PIN26_PORTREG, 26, CORE_PIN26_CONFIG);
 
 #undef MAKE_PIN
 
-#elif defined(ARDUINO_SAM_DUE) && defined(__SAM3X8E__)
+#elif defined(ARDUINO_SAM_DUE)
 
 // SetDirRead:
 //   Disable interrupts
@@ -1020,6 +1020,121 @@ MAKE_PIN(P75, PIOA, PIO_PA26); // MOSI
 MAKE_PIN(P76, PIOA, PIO_PA27); // CLK
 MAKE_PIN(P77, PIOA, PIO_PA28);
 MAKE_PIN(P78, PIOB, PIO_PB23); // Unconnected
+
+#undef MAKE_PIN
+
+#elif defined(ARDUINO_SAMD_ZERO)
+// For now, to keep stuff simple.
+#define MAKE_PIN(className, pin) \
+class className { \
+public: \
+  static void Set() { \
+    digitalWrite(pin, HIGH);\
+  } \
+  static void Clear() { \
+    digitalWrite(pin, LOW); \
+  } \
+  static void SetDirRead() { \
+    pinMode(pin, INPUT); \
+  } \
+  static void SetDirWrite() { \
+    pinMode(pin, OUTPUT); \
+  } \
+  static uint8_t IsSet() { \
+    return digitalRead(pin); \
+  } \
+};
+
+// 0 .. 13 - Digital pins
+MAKE_PIN(P0, 0); // RX
+MAKE_PIN(P1, 1); // TX
+MAKE_PIN(P2, 2);
+MAKE_PIN(P3, 3);
+MAKE_PIN(P4, 4);
+MAKE_PIN(P5, 5);
+MAKE_PIN(P6, 6);
+MAKE_PIN(P7, 7);
+MAKE_PIN(P8, 8);
+MAKE_PIN(P9, 9);
+MAKE_PIN(P10, 10);
+MAKE_PIN(P11, 11);
+MAKE_PIN(P12, 12);
+MAKE_PIN(P13, 13); // LED
+
+// 14..19 - Analog pins
+MAKE_PIN(P14, 14); // A0
+MAKE_PIN(P15, 15); // A1
+MAKE_PIN(P16, 16); // A2
+MAKE_PIN(P17, 17); // A3
+MAKE_PIN(P18, 18); // A4
+MAKE_PIN(P19, 19); // A5
+
+// 20..21 I2C pins (SDA/SCL and also EDBG:SDA/SCL)
+MAKE_PIN(P20, 20); // SDA
+MAKE_PIN(P21, 21); // SCL
+
+// 22, 23, 24 - SPI pins (ICSP:MISO,SCK,MOSI)
+MAKE_PIN(P22, 22); // MISO
+MAKE_PIN(P23, 23); // MOSI
+MAKE_PIN(P24, 24); // SCK
+
+#undef MAKE_PIN
+
+#elif defined(ARDUINO_SAM_ZERO)
+// For now, to keep stuff simple.
+// for arduino.org m0 boards
+#define MAKE_PIN(className, pin) \
+class className { \
+public: \
+  static void Set() { \
+    digitalWrite(pin, HIGH);\
+  } \
+  static void Clear() { \
+    digitalWrite(pin, LOW); \
+  } \
+  static void SetDirRead() { \
+    pinMode(pin, INPUT); \
+  } \
+  static void SetDirWrite() { \
+    pinMode(pin, OUTPUT); \
+  } \
+  static uint8_t IsSet() { \
+    return digitalRead(pin); \
+  } \
+};
+
+// 0 .. 13 - Digital pins
+MAKE_PIN(P0, 0); // RX
+MAKE_PIN(P1, 1); // TX
+MAKE_PIN(P2, 2);
+MAKE_PIN(P3, 3);
+MAKE_PIN(P4, 4);
+MAKE_PIN(P5, 5);
+MAKE_PIN(P6, 6);
+MAKE_PIN(P7, 7);
+MAKE_PIN(P8, 8);
+MAKE_PIN(P9, 9);
+MAKE_PIN(P10, 10);
+MAKE_PIN(P11, 11);
+MAKE_PIN(P12, 12);
+MAKE_PIN(P13, 13); // LED
+
+// 14..19 - Analog pins
+MAKE_PIN(P14, 14); // A0
+MAKE_PIN(P15, 15); // A1
+MAKE_PIN(P16, 16); // A2
+MAKE_PIN(P17, 17); // A3
+MAKE_PIN(P18, 18); // A4
+MAKE_PIN(P19, 19); // A5
+
+// 20..21 I2C pins (SDA/SCL and also EDBG:SDA/SCL)
+MAKE_PIN(P20, 20); // SDA
+MAKE_PIN(P21, 21); // SCL
+
+// 22, 23, 24 - SPI pins (ICSP:MISO,SCK,MOSI)
+MAKE_PIN(P22, 22); // MISO
+MAKE_PIN(P23, 23); // MOSI
+MAKE_PIN(P24, 24); // SCK
 
 #undef MAKE_PIN
 
@@ -1195,6 +1310,59 @@ MAKE_PIN(P16, 16); // A2
 MAKE_PIN(P17, 17); // A3
 MAKE_PIN(P18, 18); // A4
 MAKE_PIN(P19, 19); // A5
+
+#undef MAKE_PIN
+
+/*for arduino 101 boards*/
+#elif defined(__ARDUINO_ARC__)
+
+#include <avr/pgmspace.h>
+// Pointers are 32 bits on arc
+#define pgm_read_pointer(p) pgm_read_dword(p)
+
+#define MAKE_PIN(className, pin) \
+class className { \
+public: \
+  static void Set() { \
+    digitalWrite(pin, HIGH);\
+  } \
+  static void Clear() { \
+    digitalWrite(pin, LOW); \
+  } \
+  static void SetDirRead() { \
+    pinMode(pin, INPUT); \
+  } \
+  static void SetDirWrite() { \
+    pinMode(pin, OUTPUT); \
+  } \
+  static uint8_t IsSet() { \
+    return digitalRead(pin); \
+  } \
+};
+
+MAKE_PIN(P0, 0);
+MAKE_PIN(P1, 1);
+MAKE_PIN(P2, 2);
+MAKE_PIN(P3, 3); //PWM
+MAKE_PIN(P4, 4);
+MAKE_PIN(P5, 5); //PWM
+MAKE_PIN(P6, 6); //PWM
+MAKE_PIN(P7, 7);
+MAKE_PIN(P8, 8);
+MAKE_PIN(P9, 9); //PWM
+
+MAKE_PIN(P10, 10); //SPI SS
+MAKE_PIN(P11, 11); //SPI MOSI
+MAKE_PIN(P12, 12); //SPI MISO
+MAKE_PIN(P13, 13); //SPI SCK / BUILTIN LED
+
+MAKE_PIN(P14, 14); // A0
+MAKE_PIN(P15, 15); // A1
+MAKE_PIN(P16, 16); // A2
+MAKE_PIN(P17, 17); // A3
+MAKE_PIN(P18, 18); // A4 SDA
+MAKE_PIN(P19, 19); // A5 SCL
+MAKE_PIN(P20, 20); // ATN
 
 #undef MAKE_PIN
 

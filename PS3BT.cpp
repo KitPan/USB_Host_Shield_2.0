@@ -21,7 +21,7 @@
 //#define PRINTREPORT // Uncomment to print the report send by the PS3 Controllers
 
 PS3BT::PS3BT(BTD *p, uint8_t btadr5, uint8_t btadr4, uint8_t btadr3, uint8_t btadr2, uint8_t btadr1, uint8_t btadr0) :
-BluetoothService(p) // Pointer to USB class instance - mandatory
+BluetoothService(p) // Pointer to BTD class instance - mandatory
 {
         pBtd->my_bdaddr[5] = btadr5; // Change to your dongle's Bluetooth address instead
         pBtd->my_bdaddr[4] = btadr4;
@@ -158,9 +158,9 @@ bool PS3BT::getStatus(StatusEnum c) {
 }
 
 void PS3BT::printStatusString() {
-        char statusOutput[102]; // Max string length plus null character
+        char statusOutput[100]; // Max string length plus null character
         if(PS3Connected || PS3NavigationConnected) {
-                strcpy_P(statusOutput, PSTR("\r\nConnectionStatus: "));
+                strcpy_P(statusOutput, PSTR("ConnectionStatus: "));
 
                 if(getStatus(Plugged)) strcat_P(statusOutput, PSTR("Plugged"));
                 else if(getStatus(Unplugged)) strcat_P(statusOutput, PSTR("Unplugged"));
@@ -185,7 +185,7 @@ void PS3BT::printStatusString() {
                 else if(getStatus(Bluetooth)) strcat_P(statusOutput, PSTR("Bluetooth - Rumble is off"));
                 else strcat_P(statusOutput, PSTR("Error"));
         } else if(PS3MoveConnected) {
-                strcpy_P(statusOutput, PSTR("\r\nPowerRating: "));
+                strcpy_P(statusOutput, PSTR("PowerRating: "));
 
                 if(getStatus(MoveCharging)) strcat_P(statusOutput, PSTR("Charging"));
                 else if(getStatus(MoveNotCharging)) strcat_P(statusOutput, PSTR("Not Charging"));
@@ -196,7 +196,7 @@ void PS3BT::printStatusString() {
                 else if(getStatus(MoveFull)) strcat_P(statusOutput, PSTR("Full"));
                 else strcat_P(statusOutput, PSTR("Error"));
         } else
-                strcpy_P(statusOutput, PSTR("\r\nError"));
+                strcpy_P(statusOutput, PSTR("Error"));
 
         USB_HOST_SERIAL.write(statusOutput);
 }
